@@ -149,7 +149,7 @@ function setQueryStringParameter(name: string, value: any) {
 }
 
 export default function Home() {
-  const [size, setSize] = useState(isMobile ? { width: 150, height: 150 } : { width: 180, height: 180 });
+  const size = isMobile ? { width: 150, height: 150 } : { width: 180, height: 180};
   let initialized = false;
   
   const [count, setCount] = useState(countOptions[1]);
@@ -205,22 +205,6 @@ export default function Home() {
       loadAnimationByCount(count);
     }, 500);
   }, []);
-
-  useEffect(() => {
-    const slider = document.getElementById('size-slider') as HTMLInputElement;
-    if (slider) {
-      const min = +slider.min;
-      const max = +slider.max;
-      const value = +slider.value;
-      const percent = ((value - min) / (max - min)) * 100;
-
-      slider.style.background = `linear-gradient(to right, #00deb5 0%, #00deb5 ${percent}%, #444 ${percent}%, #444 100%)`;
-    }
-  }, [size.width]);
-
-  const handleSliderChange = (value: number) => {
-    setSize({ width: value, height: value });
-  };
 
   const loadCanvasKit = async () => {
     const canvasKit = await InitCanvasKit({
@@ -430,18 +414,6 @@ export default function Home() {
               >
                 Set
               </button>
-              <div className="text-white w-full max-w-md">
-                <label className="block mb-2">Box Size: {size.width}px</label>
-                <input
-                  type="range"
-                  min={50}
-                  max={180}
-                  value={size.width}
-                  onChange={(e) => handleSliderChange(Number(e.target.value))}
-                  className="slider"
-                  id="size-slider"
-                />
-              </div>
           </div>
 
           <div className="mt-6 flex w-full gap-x-4">
@@ -465,7 +437,7 @@ export default function Home() {
                 className="flex-none rounded-md bg-[#00deb5] px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
                 onClick={spawnAnimation}
               >
-                wow
+                Spawn
               </button>
             </div>
         </div>
@@ -474,7 +446,7 @@ export default function Home() {
           className="animation-list mx-auto mt-20 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:mx-0 lg:max-w-none sm:grid-cols-4 xl:grid-cols-5 grid-cols-2"
         >
           {animationList.map((anim: any, index: number) => (
-            <li key={`${anim.name}-${anim.lottieURL}-${playerId}-${index}`} className={`${anim.name}-${index}`} style={{ maxWidth: `${size.width}px` }}>
+            <li key={`${anim.name}-${anim.lottieURL}-${playerId}-${index}`} className={`${anim.name}-${index} max-w-[${size.width}px]`}>
               {
                 playerId == 1 &&
                 (
@@ -537,7 +509,7 @@ export default function Home() {
                   />
                 )
               }
-              <h3 className={`mt-6 text-lg font-semibold leading-8 tracking-tight text-white overflow-hidden text-ellipsis whitespace-nowrap`}>{anim.name}</h3>
+              <h3 className={`mt-6 text-lg font-semibold leading-8 tracking-tight text-white max-w-[${size.width}px] overflow-hidden`}>{anim.name}</h3>
             </li>
           ))}
         </ul>
